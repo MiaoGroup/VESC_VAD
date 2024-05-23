@@ -48,7 +48,7 @@ Label根据语音片段和Label文件进行生成，如果语音片段完全位�
 运行该文件，并更改相应参数，即可得到评估结果。默认评估对data_1的预测结果。
 
 ```python
-WAV = 'VAD/data/data_1.wav'
-LABEL_INPUT = 'VAD/label/data_1.txt'
-PREDICT_INPUT = 'VAD/predict/data_1.txt'
+WAV = dir_path + '/data/data_1.wav'
+LABEL_INPUT = dir_path + '/label/data_1.txt'
+PREDICT_INPUT = dir_path + '/predict/data_1.txt'
 ```

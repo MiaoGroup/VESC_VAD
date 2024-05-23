@@ -1,10 +1,12 @@
 import numpy as np
 import librosa
-
+from pathlib import Path
 SAMPLE_RATE = 8000
-WAV = 'VAD/data/data_1.wav'
-LABEL_INPUT = 'VAD/label/data_1.txt'
-PREDICT_INPUT = 'VAD/predict/data_1.txt'
+
+dir_path = str(Path(__file__).parent)
+WAV = dir_path + '/data/data_1.wav'
+LABEL_INPUT = dir_path + '/label/data_1.txt'
+PREDICT_INPUT = dir_path + '/predict/data_1.txt'
 
 def evaluate(data_length, label_input, predict_input):
     """
