@@ -33,7 +33,6 @@ def get_train_data(
         signal, signal_len, sample_rate = read_wav(str(file_dir))
 
 
-
         signal, signal_len = sample_rate_to_8K(signal, sample_rate)
 
         for i in range(0, signal_len, int(FRAME_STEP * FS)):
@@ -44,9 +43,14 @@ def get_train_data(
             train_voice_segments.append(tmp_signal)
             
             label_num = 0
+            right_index = i + FS * FRAME_T - 1
             for label in labels:
-                if i >= label[0] and int(i + FS * FRAME_T) <= label[1]:
+                if i >= label[0] and right_index <= label[1]:
                     label_num = 1
+                # elif i >= label[0] and right_index >= label[1]:
+                #     label_num = [1,0]
+                # elif i <= label[0] and right_index <= label[1]:
+                #     label_num = [0,1]
 
             train_voice_label.append(label_num)
 
@@ -61,6 +65,7 @@ class VAD_Dataset(Dataset):
         self.data = self.data.reshape(-1, 1, 1, 240)
         self.data = torch.from_numpy(self.data).float()
         self.label = torch.from_numpy(self.label).float()
+        print(self.label.shape)
         
     def __len__(self):
         return self.data.shape[0]

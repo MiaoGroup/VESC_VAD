@@ -1,9 +1,10 @@
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from util import read_wav, sample_rate_to_8K
+from util import fir, read_wav, sample_rate_to_8K
 from vad_dataset import VAD_Dataset
 from pathlib import Path
+
 
 class CNN(nn.Module):
     def __init__(
@@ -35,9 +36,11 @@ class CNN(nn.Module):
         self.output = nn.Linear(in_features=self.fc_size, out_features=2)
 
     def forward(self, x):
+        # x = fir(x)
         x = self.model(x)
         x = x.view(x.size(0), -1)
         output = self.output(x)
+        # print(output.shape)
         return output
 
 
@@ -54,16 +57,16 @@ if __name__ == "__main__":
 
     train_dataloader = DataLoader(datasets, batch_size=32, shuffle=True)
     test_dataloader = DataLoader(datasets, batch_size=32, shuffle=True)
+
     for X, y in test_dataloader:
-        print(f"Shape of X [N, C, H, W]: {X.shape}")
+        print(f"Shape of X: {X.shape}")
         print(f"Shape of y: {y.shape} {y.dtype}")
         break
 
     model = CNN().to(device)
 
     loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
-
+    optimizer = torch.optim.Adam(model.parameters(), lr=5e-4)
 
     def train(dataloader, model, loss_fn, optimizer):
         size = len(dataloader.dataset)
@@ -84,7 +87,6 @@ if __name__ == "__main__":
                 loss, current = loss.item(), (batch + 1) * len(X)
                 print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
-
     def test(dataloader, model, loss_fn):
         size = len(dataloader.dataset)
         num_batches = len(dataloader)
@@ -98,8 +100,9 @@ if __name__ == "__main__":
                 correct += (pred.argmax(1) == y).type(torch.float).sum().item()
         test_loss /= num_batches
         correct /= size
-        print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-
+        print(
+            f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n"
+        )
 
     epochs = 5
     for t in range(epochs):
@@ -107,5 +110,6 @@ if __name__ == "__main__":
         train(train_dataloader, model, loss_fn, optimizer)
         test(test_dataloader, model, loss_fn)
     print("Done!")
+
     dir_path = Path(__file__).parent
     torch.save(model.state_dict(), f"{dir_path}/model/model.pth")
