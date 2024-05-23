@@ -30,20 +30,17 @@ class CNN(nn.Module):
                 bias=False,
             ),
             nn.BatchNorm2d(num_features=n_channel),
+            nn.Flatten(),
             nn.LeakyReLU(inplace=True),
+            nn.Linear(in_features=self.fc_size, out_features=2),
+            nn.Softmax(dim=1)
         )
         self.model = model
-        self.output = nn.Linear(in_features=self.fc_size, out_features=2)
-        self.output2 = nn.Tanh()
 
     def forward(self, x):
         # x = fir(x)
         x = self.model(x)
-        x = x.view(x.size(0), -1)
-        output = self.output(x)
-        
-        # print(output.shape)
-        return self.output2(output)
+        return x
 
 
 if __name__ == "__main__":
