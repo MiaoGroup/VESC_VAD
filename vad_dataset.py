@@ -64,7 +64,7 @@ class VAD_Dataset(Dataset):
         self.data, self.label = get_train_data()
         self.data = self.data.reshape(-1, 1, 1, 240)
         self.data = torch.from_numpy(self.data).float()
-        self.label = torch.from_numpy(self.label).float()
+        self.label = torch.from_numpy(self.label).long()
         print(self.label.shape)
         
     def __len__(self):

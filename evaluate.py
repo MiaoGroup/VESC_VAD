@@ -4,9 +4,11 @@ from pathlib import Path
 SAMPLE_RATE = 8000
 
 dir_path = str(Path(__file__).parent)
-WAV = dir_path + '/data/data_1.wav'
-LABEL_INPUT = dir_path + '/label/data_1.txt'
-PREDICT_INPUT = dir_path + '/predict/data_1.txt'
+
+data_num = 1
+WAV = dir_path + f'/data/data_{data_num}.wav'
+LABEL_INPUT = dir_path + f'/label/data_{data_num}.txt'
+PREDICT_INPUT = dir_path + f'/predict/data_{data_num}.txt'
 
 def evaluate(data_length, label_input, predict_input):
     """
