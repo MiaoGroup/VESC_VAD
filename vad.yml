@@ -1,4 +1,4 @@
-name: /Users/zhaoyichen/Documents/Projects/VESC_2024/初赛/.conda
+name: ./.conda
 channels:
   - pytorch
   - defaults
