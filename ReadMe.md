@@ -42,3 +42,13 @@ Label根据语音片段和Label文件进行生成，如果语音片段完全位�
 
 主要使用了1X2的卷积核进行滑动卷积，slide设置为2，参见`model.py`。
 使用了交叉熵函数计算Loss值，以及使用了Adam算法对网络进行优化。
+
+# evaluate.py
+
+运行该文件，并更改相应参数，即可得到评估结果。默认评估对data_1的预测结果。
+
+```python
+WAV = 'VAD/data/data_1.wav'
+LABEL_INPUT = 'VAD/label/data_1.txt'
+PREDICT_INPUT = 'VAD/predict/data_1.txt'
+```
