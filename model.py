@@ -34,14 +34,16 @@ class CNN(nn.Module):
         )
         self.model = model
         self.output = nn.Linear(in_features=self.fc_size, out_features=2)
+        self.output2 = nn.Tanh()
 
     def forward(self, x):
         # x = fir(x)
         x = self.model(x)
         x = x.view(x.size(0), -1)
         output = self.output(x)
+        
         # print(output.shape)
-        return output
+        return self.output2(output)
 
 
 if __name__ == "__main__":
